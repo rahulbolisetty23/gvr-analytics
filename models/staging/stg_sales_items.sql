@@ -15,7 +15,10 @@ renamed as (
 
         -- when
         try_to_date(date::varchar)                    as invoice_date,
-        try_to_time(timestamp::varchar, 'HH12:MI:SS AM') as invoice_time,
+        coalesce(
+            try_to_time("TIMESTAMP"::varchar, 'HH12:MI:SS AM'),
+            try_to_time("TIMESTAMP"::varchar)
+        )                                             as invoice_time,
 
         -- product
         itemname                                      as item_name,
