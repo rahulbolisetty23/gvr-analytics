@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: One row per product sold, with cleaned category and latest price.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+
+  - name: dim_customers
+    description: One row per customer. Walk-ins share a single customer_id.
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: customer_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Walk-in', 'B2B', 'Named retail']
+
+  - name: fact_sales_lines
+    description: One row per product line on a bill.
+    columns:
+      - name: sales_line_id
+        data_tests: [unique, not_null]
+      - name: invoice_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('fact_invoices')
+                field: invoice_id
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: customer_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+  - name: fact_invoices
+    description: One row per bill (retail and B2B).
+    columns:
+      - name: invoice_id
+        data_tests: [unique, not_null]
+      - name: voucher_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['retailInvoice', 'invoice']
