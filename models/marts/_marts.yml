@@ -42,6 +42,19 @@ models:
               arguments:
                 to: ref('dim_customers')
                 field: customer_id
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: time_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_time')
+                field: time_key
 
   - name: fact_invoices
     description: One row per bill (retail and B2B).
@@ -53,3 +66,17 @@ models:
           - accepted_values:
               arguments:
                 values: ['retailInvoice', 'invoice']
+
+  - name: dim_date
+    description: One row per day, Apr 2025 to Mar 2027, with calendar, Indian fiscal and festival attributes.
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+      - name: date_day
+        data_tests: [unique, not_null]
+
+  - name: dim_time
+    description: One row per minute of the day; time_key = HHMM.
+    columns:
+      - name: time_key
+        data_tests: [unique, not_null]
