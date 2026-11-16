@@ -15,6 +15,8 @@ select
     l.customer_id,
     l.invoice_date,
     l.invoice_time,
+    to_number(to_char(l.invoice_date, 'YYYYMMDD'))       as date_key,
+    hour(l.invoice_time) * 100 + minute(l.invoice_time)  as time_key,
     l.voucher_type,
     l.payment_mode,
     l.quantity,
