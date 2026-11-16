@@ -6,8 +6,9 @@ renamed as (
     select
         -- keys
         id                                  as invoice_id,       -- unique per bill
-        vouchernumber                       as voucher_number,   -- NOT unique (separate series per voucher type)
-        partyid                             as customer_id,      -- walk-ins all share one id
+        vouchernumber::varchar              as voucher_number,
+        partyid::varchar                    as customer_id,
+        partyname = 'Walk-in Customer'      as is_walk_in_customer,
 
         -- dates
         date                                as invoice_date,
