@@ -51,6 +51,7 @@ models:
                 field: date_key
       - name: time_key
         data_tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('dim_time')
